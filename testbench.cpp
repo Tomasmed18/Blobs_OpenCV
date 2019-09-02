@@ -16,7 +16,10 @@ void printROI(ROI roi){
 }
 
 int main(int argc, char** argv){
-	ROI roi = cornerBorderDimensionDetectionCV("data/Blobs/blobs_1.jpg", "test_");
+	std::string fileName = "data/Blobs/blobs_1.jpg";
+	ROI roi = cornerBorderDimensionDetectionCV(fileName, "CBD_");
 	printROI(roi);
+	blobsDetectionCV(fileName, roi, "Blob_");
+
 	return 0;
 }

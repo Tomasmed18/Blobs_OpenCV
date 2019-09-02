@@ -24,15 +24,6 @@
 #define MIN_AREA 5900000
 #define MAX_AREA 6100000
 
-struct ROI{ //coordinates of the Region of Interest
-	int
-	x1, y1,
-	x2, y2,
-	x3, y3,
-	x4, y4;
-	bool valid = false;
-};
-
 
 
 ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outPrefix);

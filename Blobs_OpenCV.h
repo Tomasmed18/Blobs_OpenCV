@@ -37,8 +37,28 @@
 
 
 //for xfOpenCV functions
-//#include "imgproc/xf_threshold.hpp"
+#include "imgproc/xf_threshold.hpp"
 
+
+struct ROI{ //coordinates of the Region of Interest
+	int
+	x1, y1,
+	x2, y2,
+	x3, y3,
+	x4, y4;
+	bool valid = false;
+};
+
+void blobsDetectionCV(std::string imageFileName, ROI roi, std::string outPrefix);
+
+//constants for the algorithm
+#define ERODE_KERNEL_SHAPE XF_SHAPE_CROSS
+#define ERODE_FILTER_SIZE 5
+#define ERODE_ITERATIONS 6
+
+#define DILATE_KERNEL_SHAPE XF_SHAPE_CROSS
+#define DILATE_FILTER_SIZE 5
+#define DILATE_ITERATIONS 5
 
 
 #endif//_BLOBS_OPENCV_H_
