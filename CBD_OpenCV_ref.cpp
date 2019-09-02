@@ -7,60 +7,57 @@ int distance(int x, int y){
 	return abs(x - y);
 }
 
-int computeDimension(PAIR_VECTOR_TYPE v1, PAIR_VECTOR_TYPE v2, PAIR_VECTOR_TYPE v3, PAIR_VECTOR_TYPE v4, cv::Mat & image){
-	std::pair<int, int> p1(-1, -1);
-	std::pair<int, int> p2(-1, -1);
-	std::pair<int, int> p3(-1, -1);
-	std::pair<int, int> p4(-1, -1);
+int computeDimension(ROI & roi, PAIR_VECTOR_TYPE v1, PAIR_VECTOR_TYPE v2, PAIR_VECTOR_TYPE v3, PAIR_VECTOR_TYPE v4, cv::Mat & image){
+
 	for (PAIR_VECTOR_TYPE::iterator p = v1.begin(); p != v1.end(); p++){
-		if (((*p).first > p1.first) || p1.first == -1)
-			p1.first = (*p).first;
-		if (((*p).second > p1.second) || p1.second == -1)
-			p1.second = (*p).second;
+		if (((*p).first > roi.x1) || roi.x1 == -1)
+			roi.x1 = (*p).first;
+		if (((*p).second > roi.y1) || roi.y1 == -1)
+			roi.y1 = (*p).second;
 	}
 	for (PAIR_VECTOR_TYPE::iterator p = v2.begin(); p != v2.end(); p++){
-		if (((*p).first < p2.first) || p2.first == -1)
-			p2.first = (*p).first;
-		if (((*p).second > p2.second) || p2.second == -1)
-			p2.second = (*p).second;
+		if (((*p).first < roi.x2) || roi.x2 == -1)
+			roi.x2 = (*p).first;
+		if (((*p).second > roi.y2) || roi.y2 == -1)
+			roi.y2 = (*p).second;
 	}
 	for (PAIR_VECTOR_TYPE::iterator p = v3.begin(); p != v3.end(); p++){
-		if (((*p).first > p3.first) || p3.first == -1)
-			p3.first = (*p).first;
-		if (((*p).second < p3.second) || p3.second == -1)
-			p3.second = (*p).second;
+		if (((*p).first > roi.x3) || roi.x3 == -1)
+			roi.x3 = (*p).first;
+		if (((*p).second < roi.y3) || roi.y3 == -1)
+			roi.y3 = (*p).second;
 	}
 	for (PAIR_VECTOR_TYPE::iterator p = v4.begin(); p != v4.end(); p++){
-		if (((*p).first < p4.first) || p4.first == -1)
-			p4.first = (*p).first;
-		if (((*p).second < p4.second) || p4.second == -1)
-			p4.second = (*p).second;
+		if (((*p).first < roi.x4) || roi.x4 == -1)
+			roi.x4 = (*p).first;
+		if (((*p).second < roi.y4) || roi.y4 == -1)
+			roi.y4 = (*p).second;
 	}
 
 	std::cout << "Corner points:" << std::endl;
-	std::cout << "p1 = (" << p1.first << ", " << p1.second << ")" << std::endl;
-	std::cout << "p2 = (" << p2.first << ", " << p2.second << ")" << std::endl;
-	std::cout << "p3 = (" << p3.first << ", " << p3.second << ")" << std::endl;
-	std::cout << "p4 = (" << p4.first << ", " << p4.second << ")" << std::endl;
+	std::cout << "p1 = (" << roi.x1 << ", " << roi.y1 << ")" << std::endl;
+	std::cout << "p2 = (" << roi.x2 << ", " << roi.y2 << ")" << std::endl;
+	std::cout << "p3 = (" << roi.x3 << ", " << roi.y3 << ")" << std::endl;
+	std::cout << "p4 = (" << roi.x4 << ", " << roi.y4 << ")" << std::endl;
 	/*
-	cv::circle(image, cv::Point(p1.first, p1.second), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
-	cv::circle(image, cv::Point(p2.first, p2.second), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
-	cv::circle(image, cv::Point(p3.first, p3.second), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
-	cv::circle(image, cv::Point(p4.first, p4.second), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::circle(image, cv::Point(roi.x1, roi.y1), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::circle(image, cv::Point(roi.x2, roi.y2), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::circle(image, cv::Point(roi.x3, roi.y3), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::circle(image, cv::Point(roi.x4, roi.y4), 20, cv::Scalar(0, 255, 0), 6, 8, 0);
 	 */
-	cv::line(image, cv::Point(p1.first, p1.second), cv::Point(p2.first, p2.second), cv::Scalar(0, 255, 0), 6, 8, 0);
-	cv::line(image, cv::Point(p2.first, p2.second), cv::Point(p4.first, p4.second), cv::Scalar(0, 255, 0), 6, 8, 0);
-	cv::line(image, cv::Point(p4.first, p4.second), cv::Point(p3.first, p3.second), cv::Scalar(0, 255, 0), 6, 8, 0);
-	cv::line(image, cv::Point(p3.first, p3.second), cv::Point(p1.first, p1.second), cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::line(image, cv::Point(roi.x1, roi.y1), cv::Point(roi.x2, roi.y2), cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::line(image, cv::Point(roi.x2, roi.y2), cv::Point(roi.x4, roi.y4), cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::line(image, cv::Point(roi.x4, roi.y4), cv::Point(roi.x3, roi.y3), cv::Scalar(0, 255, 0), 6, 8, 0);
+	cv::line(image, cv::Point(roi.x3, roi.y3), cv::Point(roi.x1, roi.y1), cv::Scalar(0, 255, 0), 6, 8, 0);
 
 
-	//calculating area of the polygon
+	// Computing area of the polygon
 	// it has to be calculated following the order of the points
 	// clockwise or the opposite
-	int s = ((p1.first * p2.second) - (p2.first * p1.second));
-	s += (p2.first * p4.second) - (p4.first * p2.second);
-	s += (p4.first * p3.second) - (p3.first * p4.second);
-	s += (p3.first * p1.second) - (p1.first * p3.second);
+	int s = ((roi.x1 * roi.y2) - (roi.x2 * roi.y1));
+	s += (roi.x2 * roi.y4) - (roi.x4 * roi.y2);
+	s += (roi.x4 * roi.y3) - (roi.x3 * roi.y4);
+	s += (roi.x3 * roi.y1) - (roi.x1 * roi.y3);
 	return abs(s / 2);
 
 }
@@ -82,10 +79,12 @@ PAIR_VECTOR_TYPE computeEdgeError(PAIR_VECTOR_TYPE vError, int minX, int maxX, i
 	return vErrorEdge;
 }
 
-void cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outPrefix){
+ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outPrefix){
 	std::cout << "**********************STARTING " + imageFileName + " CORNER DETECTION**********************\n";
 
-
+	ROI roi;
+	roi.x1 = -1; roi.y1 = -1; roi.x2 = -1; roi.y2 = -1;
+	roi.x3 = -1; roi.y3 = -1; roi.x4 = -1; roi.y4 = -1;
 	//****************************************************************************STEP 1 >> READ THE IMAGE
 		std::cout << "\nSTEP 1: READING IMAGE "+ imageFileName +"\n";
 
@@ -267,7 +266,7 @@ void cornerBorderDimensionDetectionCV(std::string imageFileName, std::string out
 
 				//DIMENSION VERIFICATION
 				//compute dimension to find the area and decide whether it passed or not all the tests
-				int area = computeDimension(v1, v2, v3, v4, dimensionImage);
+				int area = computeDimension(roi, v1, v2, v3, v4, dimensionImage);
 
 				//save the image with the 4 real corners drawn
 				cv::imwrite(outPrefix + "step_8.jpg", dimensionImage);
@@ -276,8 +275,11 @@ void cornerBorderDimensionDetectionCV(std::string imageFileName, std::string out
 
 				//verify if the area satisfies the criteria
 				if (area >= MIN_AREA)
-					if (area <= MAX_AREA)
+					if (area <= MAX_AREA){
+						roi.valid = true;
 						std::cout << "\n>>>>>>>>>>>>>>>>>>>>This tile passed the tests!<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+
+					}
 					else{
 						int areaError = (area - MAX_AREA);
 						std::cout << "Dimension error: the tile is too big. It exceeds the maximum area by " << areaError << " pixels."<< std::endl;
@@ -293,4 +295,5 @@ void cornerBorderDimensionDetectionCV(std::string imageFileName, std::string out
 		}
 
 		std::cout << "\n.............FINISHED " + imageFileName + " PROCESSING\n\n";
+		return roi;
 }
