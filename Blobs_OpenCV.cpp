@@ -34,13 +34,47 @@ void blobsDetectionCV(std::string imageFileName, ROI roi, std::string outPrefix)
 	cv::dilate(step_4, step_5, element2, cv::Point(-1, -1), DILATE_ITERATIONS, cv::BORDER_CONSTANT);
 	cv::imwrite(outPrefix + "step_5.jpg", step_5);
 
+
 	//for testing different parameter values...
-	for(int fs = 3; fs < 9; fs=fs+2){
-		for(int it = 2; it < 10; it++){
-			cv::Mat element3 = cv::getStructuringElement(DILATE_KERNEL_SHAPE,cv::Size(fs, fs), cv::Point(-1, -1));
-			cv::dilate(step_4, step_5, element3, cv::Point(-1, -1), it, cv::BORDER_CONSTANT);
-			std::string outFileName = outPrefix + "step_5_fs_" + std::to_string(fs)+ "_it_" + std::to_string(it) + ".jpg";
-			cv::imwrite(outFileName, step_5);
+	/*
+	for(int erosion_fs = 3; erosion_fs < 9; erosion_fs=erosion_fs+2){
+		for(int erosion_it = 2; erosion_it < 10; erosion_it++){
+
+			cv::Mat element4 = cv::getStructuringElement(ERODE_KERNEL_SHAPE,cv::Size(erosion_fs, erosion_fs), cv::Point(-1, -1));
+			cv::erode(step_3, step_4, element4, cv::Point(-1, -1), erosion_it, cv::BORDER_CONSTANT);
+
+			for(int dilate_fs = 3; dilate_fs < 9; dilate_fs=dilate_fs+2){
+				for(int dilate_it = 2; dilate_it < 10; dilate_it++){
+					cv::Mat element3 = cv::getStructuringElement(DILATE_KERNEL_SHAPE,cv::Size(dilate_fs, dilate_fs), cv::Point(-1, -1));
+					cv::dilate(step_4, step_5, element3, cv::Point(-1, -1), dilate_it, cv::BORDER_CONSTANT);
+					std::string outFileName = outPrefix + "step_5_dfs_" + std::to_string(dilate_fs)+ "_dit_" + std::to_string(dilate_it) +
+							"_efs_" + std::to_string(erosion_fs) + "_eit_" + std::to_string(erosion_it) + ".jpg";
+					cv::imwrite(outFileName, step_5);
+				}
+			}
 		}
 	}
+	*/
+
+
+	std::vector<std::vector<cv::Point> > contours;
+	std::vector<cv::Vec4i> hierarchy;
+	cv::findContours( step_5, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0) );
+
+	std::cout << "Contours: " << contours.size() << "\n\n";
+
+	  /// Draw contours
+	  cv::Mat step_6;
+	  cv::cvtColor(step_1, step_6, cv::COLOR_GRAY2RGB);
+	  for( int i = 0; i< contours.size(); i++ )
+	     {
+		  int r = rand() % 171 + 50;
+		  int g = rand() % 171 + 50;
+		  int b = rand() % 171 + 50;
+	       cv::Scalar color = cv::Scalar( r, g, b);
+	       cv::fillConvexPoly(step_6, contours.at(i), color);
+	       cv::drawContours( step_6, contours, i, cv::Scalar(0), 5, 8, hierarchy, 0, cv::Point() );
+
+	     }
+	  cv::imwrite("blobs_step_6.jpg", step_6);
 }
