@@ -94,17 +94,15 @@ void blobsDetectionCV(std::string imageFileName, ROI roi, std::string outPrefix)
 		  //calculate the contour features
 		  double area = cv::contourArea(contour);
 		  double perimeter = cv::arcLength(contour, true);
-		  double pi = 3.14159265358979323846;
-		  double roundness = sqrt(area / pi) / (perimeter * 2 * pi);
+		  double roundness = sqrt(area / PI) / (perimeter * 2 * PI);
 
 		  cout << "Contour " << i << " area: " << area << " perimeter: " << perimeter << "\n     ---> roundness: " << roundness;
 
 
 
-		  if (area > 5000 && roundness > 0.015){
-			  cout << " ***********************\n";
+		  if (area > MIN_BLOB_AREA && roundness > MIN_BLOB_ROUNDNESS){
+			  cout << "                      <-----------------------  **********BLOB DEFECT DETECTED*************\n";
 			  cv::Scalar color = cv::Scalar(0, 0, 255);
-			  //cv::fillConvexPoly(step_7, contour, color);
 			  cv::drawContours( step_7, contours, i, color, 5, 8, hierarchy, 0, cv::Point() );
 		  }
 		  else

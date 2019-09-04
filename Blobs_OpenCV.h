@@ -63,5 +63,9 @@ void blobsDetectionCV(std::string imageFileName, ROI roi, std::string outPrefix)
 #define DILATE_FILTER_SIZE 5
 #define DILATE_ITERATIONS 4
 
+#define PI 3.14159265358979323846
+
+#define MIN_BLOB_AREA 5000
+#define MIN_BLOB_ROUNDNESS 0.015
 
 #endif//_BLOBS_OPENCV_H_
