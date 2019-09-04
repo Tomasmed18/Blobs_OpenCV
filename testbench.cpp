@@ -15,11 +15,18 @@ void printROI(ROI roi){
 	}
 }
 
-int main(int argc, char** argv){
-	std::string fileName = "data/Blobs/blobs_1.jpg";
-	ROI roi = cornerBorderDimensionDetectionCV(fileName, "CBD_");
+void verifyDefects(std::string filename, std::string prefix){
+	ROI roi = cornerBorderDimensionDetectionCV(filename, prefix + "_verification_0_");
 	printROI(roi);
-	blobsDetectionCV(fileName, roi, "Blob_");
+	blobsDetectionCV(filename, roi, prefix + "_verification_1_");
 
+}
+
+int main(int argc, char** argv){
+
+	for (int i = 1; i < 7; i++){
+		std::string fileName = "data/Blobs/blobs_" + std::to_string(i) + ".jpg";
+		verifyDefects(fileName, std::to_string(i));
+	}
 	return 0;
 }
