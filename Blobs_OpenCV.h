@@ -35,6 +35,9 @@
 //#include "common/xf_axi.h"
 //#include "common/xf_infra.h"
 
+#define _USE_MATH_DEFINES
+#include "math.h"
+
 
 //for xfOpenCV functions
 //#include "imgproc/xf_threshold.hpp"
