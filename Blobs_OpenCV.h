@@ -67,5 +67,6 @@ void blobsDetectionCV(std::string imageFileName, ROI roi, std::string outPrefix)
 
 #define MIN_BLOB_AREA 5000
 #define MIN_BLOB_ROUNDNESS 0.015
+#define MIN_BLOB_ROUNDNESS_2 4000
 
 #endif//_BLOBS_OPENCV_H_
