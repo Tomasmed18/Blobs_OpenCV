@@ -6,15 +6,15 @@
 #define PAIR_VECTOR_TYPE std::vector<std::pair<int, int>>
 
 // for threshold
-#define THRESH 85
+#define THRESH 35//85
 #define NPIX XF_NPPC8
 #define THRESH_TYPE XF_THRESHOLD_TYPE_BINARY
 
 // for ERODE and DILATE functions
 #define KERNEL_SHAPE XF_SHAPE_CROSS
 #define FILTER_SIZE 3
-#define ERODE_ITERATIONS 3
-#define DILATE_ITERATIONS 12
+#define ERODE_ITERATIONS 1//3
+#define DILATE_ITERATIONS 4//12
 
 //handicaps
 #define HANDICAP_CORNER 20

@@ -90,14 +90,37 @@ ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outP
 
 		cv::Mat im;
 		im = cv::imread(imageFileName, CV_LOAD_IMAGE_GRAYSCALE);
-		cv::imwrite(outPrefix + "step_1.jpg", im);
+		cv::imwrite(outPrefix + "step_1_1.jpg", im);
 
+	//****************************************************************************STEP 1.5 >> REMAP THE IMAGE
+
+		cv::Mat im_remapped;
+		cv::Mat map1, map2;
+		map1 = cv::Mat::zeros(im.rows, im.cols, CV_16SC2);
+		map2 = cv::Mat::zeros(im.rows, im.cols, CV_16SC2);
+		cv::Mat camera_matrix, distortion_coefficients;
+
+		cv::Size imageSize(map1.cols, map1.rows);
+		cv::FileStorage fs;
+		fs.open("camera_calibration.xml", cv::FileStorage::READ);
+
+
+		fs["Camera_Matrix"] >> camera_matrix;
+		fs["Distortion_Coefficients"] >> distortion_coefficients;
+
+		cv::initUndistortRectifyMap(camera_matrix, distortion_coefficients, cv::Mat(),
+			           cv::getOptimalNewCameraMatrix(camera_matrix, distortion_coefficients, imageSize, 1, imageSize, 0),
+			           imageSize, CV_16SC2, map1, map2);
+
+		cv::remap(im, im_remapped, map1, map2, cv::INTER_LINEAR , cv::BORDER_CONSTANT, 0);
+
+		imwrite(outPrefix + "step_1_2.jpg", im_remapped);
 
 		//****************************************************************************STEP 2 >> THRESHOLD
 		std::cout << "STEP 2: THRESHOLD\n";
 
 		cv::Mat threshold;
-		cv::threshold(im, threshold, THRESH, 255, im.type());
+		cv::threshold(im_remapped, threshold, THRESH, 255, im.type());
 		//cv::threshold(im, threshold, 110, 255, im.type());
 		//cv::threshold(im, threshold, 120, 255, im.type());
 		//cv::threshold(im, threshold, 130, 255, im.type());
