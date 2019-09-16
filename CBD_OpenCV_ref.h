@@ -5,6 +5,9 @@
 
 #define PAIR_VECTOR_TYPE std::vector<std::pair<int, int>>
 
+// to crop the image
+#define PIXELS_CROP 1
+
 // for threshold
 #define THRESH 35//85
 #define NPIX XF_NPPC8

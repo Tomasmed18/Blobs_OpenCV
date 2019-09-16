@@ -85,14 +85,21 @@ ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outP
 	ROI roi;
 	roi.x1 = -1; roi.y1 = -1; roi.x2 = -1; roi.y2 = -1;
 	roi.x3 = -1; roi.y3 = -1; roi.x4 = -1; roi.y4 = -1;
-	//****************************************************************************STEP 1 >> READ THE IMAGE
+	//****************************************************************************STEP 1.1 >> READ THE IMAGE
 		std::cout << "\nSTEP 1: READING IMAGE "+ imageFileName +"\n";
 
 		cv::Mat im;
 		im = cv::imread(imageFileName, CV_LOAD_IMAGE_GRAYSCALE);
 		cv::imwrite(outPrefix + "step_1_1.jpg", im);
 
-	//****************************************************************************STEP 1.5 >> REMAP THE IMAGE
+	//****************************************************************************STEP 1.2 >> CROP THE IMAGE
+
+		cv::Mat cropped = im(cv::Rect(PIXELS_CROP, PIXELS_CROP, im.cols - PIXELS_CROP * 2, im.rows - PIXELS_CROP * 2));
+		imwrite(outPrefix + "step_1_2.jpg", cropped);
+
+		im = cropped;
+
+	//****************************************************************************STEP 1.3 >> REMAP THE IMAGE
 
 		cv::Mat im_remapped;
 		cv::Mat map1, map2;
@@ -113,14 +120,15 @@ ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outP
 			           imageSize, CV_16SC2, map1, map2);
 
 		cv::remap(im, im_remapped, map1, map2, cv::INTER_LINEAR , cv::BORDER_CONSTANT, 0);
+		imwrite(outPrefix + "step_1_3.jpg", im_remapped);
 
-		imwrite(outPrefix + "step_1_2.jpg", im_remapped);
+
 
 		//****************************************************************************STEP 2 >> THRESHOLD
 		std::cout << "STEP 2: THRESHOLD\n";
 
 		cv::Mat threshold;
-		cv::threshold(im_remapped, threshold, THRESH, 255, im.type());
+		cv::threshold(im_remapped, threshold, THRESH, 255, im_remapped.type());
 		//cv::threshold(im, threshold, 110, 255, im.type());
 		//cv::threshold(im, threshold, 120, 255, im.type());
 		//cv::threshold(im, threshold, 130, 255, im.type());
