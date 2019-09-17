@@ -139,7 +139,7 @@ ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outP
 		std::cout << "STEP 3: FILTERING SMALL ELEMENTS\n";
 
 		cv::Mat erode;
-		cv::Mat element1 = cv::getStructuringElement(KERNEL_SHAPE,cv::Size(FILTER_SIZE, FILTER_SIZE), cv::Point(-1, -1));
+		cv::Mat element1 = cv::getStructuringElement(ERODE_KERNEL_SHAPE,cv::Size(ERODE_FILTER_SIZE, ERODE_FILTER_SIZE), cv::Point(-1, -1));
 		cv::erode(threshold, erode, element1, cv::Point(-1, -1), ERODE_ITERATIONS, cv::BORDER_CONSTANT);
 
 		cv::imwrite(outPrefix + "step_3.jpg", erode);
@@ -150,7 +150,7 @@ ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outP
 		std::cout << "STEP 4: FILLING HOLES\n";
 
 		cv::Mat dilate;
-		cv::Mat element2 = cv::getStructuringElement(KERNEL_SHAPE,cv::Size(FILTER_SIZE, FILTER_SIZE), cv::Point(-1, -1));
+		cv::Mat element2 = cv::getStructuringElement(DILATE_KERNEL_SHAPE,cv::Size(DILATE_FILTER_SIZE, DILATE_FILTER_SIZE), cv::Point(-1, -1));
 		cv::dilate(erode, dilate, element2, cv::Point(-1, -1), DILATE_ITERATIONS, cv::BORDER_CONSTANT);
 
 		cv::imwrite(outPrefix + "step_4.jpg", dilate);
