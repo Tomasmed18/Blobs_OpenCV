@@ -115,6 +115,8 @@ ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outP
 		fs["Camera_Matrix"] >> camera_matrix;
 		fs["Distortion_Coefficients"] >> distortion_coefficients;
 
+		fs.release();
+
 		cv::initUndistortRectifyMap(camera_matrix, distortion_coefficients, cv::Mat(),
 			           cv::getOptimalNewCameraMatrix(camera_matrix, distortion_coefficients, imageSize, 1, imageSize, 0),
 			           imageSize, CV_16SC2, map1, map2);
@@ -293,14 +295,16 @@ ROI cornerBorderDimensionDetectionCV(std::string imageFileName, std::string outP
 				//****************************************************************************STEP 8 >> DIMENSION VERIFICATION
 				std::cout << "\nSTEP 8: DIMENSION VERIFICATION\n\n";
 				cv::Mat dimensionImage = cv::imread(imageFileName, CV_LOAD_IMAGE_COLOR);
+				cv::Mat dimensionImage_remapped;
+				cv::remap(dimensionImage, dimensionImage_remapped, map1, map2, cv::INTER_LINEAR , cv::BORDER_CONSTANT, 0);
 				//cv::cvtColor(im, dimensionImage, cv::COLOR_GRAY2RGB); //to show the points in color
 
 				//DIMENSION VERIFICATION
 				//compute dimension to find the area and decide whether it passed or not all the tests
-				int area = computeDimension(roi, v1, v2, v3, v4, dimensionImage);
+				int area = computeDimension(roi, v1, v2, v3, v4, dimensionImage_remapped);
 
 				//save the image with the 4 real corners drawn
-				cv::imwrite(outPrefix + "step_8.jpg", dimensionImage);
+				cv::imwrite(outPrefix + "step_8.jpg", dimensionImage_remapped);
 
 				std::cout << "Area: " << area << std::endl;
 
